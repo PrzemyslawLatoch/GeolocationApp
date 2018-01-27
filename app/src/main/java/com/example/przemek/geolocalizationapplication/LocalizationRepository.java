@@ -54,4 +54,22 @@ class LocalizationRepository {
         return listResult;
     }
 
+    public Localization getPositionsById(String positionId) {
+        String[] columns = {"Id", "Name", "Description", "Radius", "Lat", "Lng"};
+        String[] whereArgs = {positionId};
+        Cursor cursor = database.query("Locations", columns, "Id=?", whereArgs, null, null, null);
+        Localization result = null;
+
+        if (cursor.moveToFirst()) {
+            String id = cursor.getString(cursor.getColumnIndex("Id"));
+            String name = cursor.getString(cursor.getColumnIndex("Name"));
+            String desc = cursor.getString(cursor.getColumnIndex("Description"));
+            double radius = cursor.getDouble(cursor.getColumnIndex("Radius"));
+            double lat = cursor.getDouble(cursor.getColumnIndex("Lat"));
+            double lng = cursor.getDouble(cursor.getColumnIndex("Lng"));
+            result = new Localization(UUID.fromString(id), name, desc, radius, lat, lng);
+        }
+
+        return result;
+    }
 }
